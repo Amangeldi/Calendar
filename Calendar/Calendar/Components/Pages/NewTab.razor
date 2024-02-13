@@ -1,0 +1,51 @@
+﻿@page "/NewTab"
+@page "/NewTab/{Year:int}"
+@using System.Globalization
+@inherits NewTabBase
+@attribute [StreamRendering]
+<div>
+    New Tab
+</div>
+
+@if (!holidays.Any())
+{
+    <div>
+        Loading...
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-between">
+        <div>
+            <table>
+                <tbody>
+                    @for (int month = 1; month <= 12; month++)
+                    {
+                        <tr>
+                            <td>
+                                <label>@DateTimeFormatInfo.CurrentInfo.GetMonthName(month)</label>
+                                <div class="month">
+                                    @for (int day = 1; day <= DateTime.DaysInMonth(Year, month); day++)
+                                    {
+                                        <p class="date @(holidays.Any(p=>p.Date == new DateTime(Year, month, day).ToString("yyyy-MM-dd"))?"active":"")">
+                                            @day
+                                        </p>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            @foreach(var holiday in holidays)
+            {
+            <div>
+                @holiday.Date - @holiday.Name
+            </div>
+            }
+        </div>
+    </div>
+}
+
